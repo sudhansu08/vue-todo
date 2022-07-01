@@ -1,21 +1,16 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import ToDo from './components/ToDo.vue'
+
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-</template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  <div class="flex justify-center w-full h-screen bg-gray-200">
+    <div class="w-full p-6 m-4 overflow-x-hidden overflow-y-auto bg-gray-100 rounded shadow lg:w-3/4 lg:max-w-lg">
+      
+      <ToDo />
+
+    </div>
+  </div>
+
+</template>
