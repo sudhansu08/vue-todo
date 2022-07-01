@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick } from "@vue/runtime-core";
 
+const emit = defineEmits(['delete']);
 
 const props = defineProps(['todos']);
 
@@ -8,16 +9,9 @@ function saveTodo() {
   localStorage.setItem('todos', JSON.stringify(props.todos));
 }
 
-async function deleteTodo(todo_id) {
-  let newTodos = props.todos.filter((todo) => todo.id !== todo_id);
-
-  // props.todos = newTodos;
-  // console.log(newTodos);
-  
-  localStorage.setItem('todos', JSON.stringify(newTodos));
-
-  await nextTick();
-  
+function deleteTodo(todo_id) {
+  confirm("Delete?");
+  emit('delete', todo_id);
 }
 
 </script>

@@ -22,11 +22,9 @@ function addTodo() {
   if (localTodos) {
     todos.value = JSON.parse(localTodos);
   }
-
-  const id = todos.value.length + 1
   
   todos.value.push({
-    id: id,
+    id: Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36),
     todo: add_todo.value,
     completed: false
   });
@@ -34,6 +32,17 @@ function addTodo() {
   localStorage.setItem('todos', JSON.stringify(todos.value));
 
   add_todo.value = '';
+}
+
+function deleteTodo(todo_id) {
+  console.log(todo_id);
+  
+  let newTodos = (todos.value).filter((todo) => todo.id !== todo_id);
+
+  todos.value = newTodos;
+  console.log(newTodos);
+  
+  localStorage.setItem('todos', JSON.stringify(newTodos));
 }
 
 onMounted(() => {
@@ -113,7 +122,7 @@ onMounted(() => {
       </transition>
     </div>
 
-    <ToDoList :todos="todos" />
+    <ToDoList :todos="todos" @delete="deleteTodo" />
     
   </div>
 
