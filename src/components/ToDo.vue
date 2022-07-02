@@ -3,13 +3,13 @@ import ToDoHeader from './ToDoHeader.vue'
 import ToDoList from './ToDoList.vue'
 import ToDoFooter from './ToDoFooter.vue'
 
-import { useTodos } from "./stores/useTodos";
+import { useStorage } from "./stores/useStorage";
 import { ref } from '@vue/reactivity';
 import { nextTick } from '@vue/runtime-core';
 
-const todos = useTodos();
+const todos = useStorage('todos', []);
+const selected_filter = useStorage('selected_filter', 'All');
 const listRef = ref();
-const selected_filter = ref('All');
 
 async function addTodo(add_todo) {
 	todos.value.push({
