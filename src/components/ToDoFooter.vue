@@ -3,7 +3,7 @@ import { ref } from "@vue/reactivity";
 import { computed } from "@vue/runtime-core";
 
 const props = defineProps(['todos', 'selected_filter']);
-const emit = defineEmits(['update:selected_filter', 'delete_completed']);
+const emit = defineEmits(['update:selected_filter', 'update:todos']);
 
 const filters = ref(['All', 'Completed', 'Active']);
 
@@ -21,17 +21,17 @@ const footer_info = computed(() => {
 })
 
 const completedTodo = computed(() => {
-  return props.todos.filter((todo) => todo.completed)
+  return props.todos.filter((todo: any) => todo.completed)
 });
 
 function deleteCompleted() {
   if(confirm("Delete?")) {
-    let newTodos = (props.todos).filter((todo) => todo.completed === false);
+    let newTodos = (props.todos).filter((todo: any) => todo.completed === false);
     emit('update:todos', newTodos);
   }
 }
 
-function doFilter(filter) {
+function doFilter(filter:string) {
   emit('update:selected_filter', filter);
 }
 </script>

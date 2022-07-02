@@ -9,9 +9,9 @@ const filteredTodo = computed(() => {
   if (props.selected_filter === 'All') {
     return props.todos;
   } else if(props.selected_filter === 'Completed') {
-    return props.todos.filter((todo) => todo.completed);
+    return props.todos.filter((todo: any) => todo.completed);
   } else if(props.selected_filter === 'Active') {
-    return props.todos.filter((todo) => !todo.completed);
+    return props.todos.filter((todo: any) => !todo.completed);
   } else {
     return [];
   }

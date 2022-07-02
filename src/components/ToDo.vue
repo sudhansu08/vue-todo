@@ -11,7 +11,7 @@ const todos = useStorage('todos', []);
 const selected_filter = useStorage('selected_filter', 'All');
 const listRef = ref();
 
-async function addTodo(add_todo) {
+async function addTodo(add_todo:string) {
 	todos.value.push({
     id: Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36),
     todo: add_todo,
@@ -21,8 +21,8 @@ async function addTodo(add_todo) {
   listRef.value.scrollTop = listRef.value.scrollHeight;
 }
 
-function deleteTodo(todo_id) {
-  let newTodos = (todos.value).filter((todo) => todo.id !== todo_id);
+function deleteTodo(todo_id:string) {
+  let newTodos = (todos.value).filter((todo: any) => todo.id !== todo_id);
   todos.value = newTodos;
 }
 

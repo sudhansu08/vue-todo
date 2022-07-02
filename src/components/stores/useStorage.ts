@@ -1,6 +1,6 @@
 import { ref, watch } from "vue";
 
-export function useStorage(name, data) {    
+export function useStorage(name: string, data: any) {    
     let storedData = read();
 
     if (storedData) {
@@ -13,7 +13,8 @@ export function useStorage(name, data) {
     watch(data, write, { deep: true });
 
     function read() {
-        return JSON.parse(localStorage.getItem(name));
+        let value = localStorage.getItem(name);
+        return value ? JSON.parse(value) : '';
     }
 
     function write() {

@@ -30,7 +30,7 @@ function updateTodo() {
   useTodoForm.value.editing_todo_id = null;
 }
 
-function deleteTodo(todo_id) {
+function deleteTodo(todo_id: string) {
   if(confirm("Delete?")) {
     emit('delete', todo_id);
   }
