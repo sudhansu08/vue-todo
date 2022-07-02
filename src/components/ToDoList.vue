@@ -37,7 +37,7 @@ const no_todo_info = computed(() => {
       v-for="todo in filteredTodo" 
       :key="todo.id"
       :todo="todo"
-      class="flex items-center transition-all duration-300 bg-white rounded-md shadow-md group"
+      class="flex items-center transition-all duration-300 rounded-md shadow-md group"
       @delete="$emit('delete', $event)"
     />
   </ul>

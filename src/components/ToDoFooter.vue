@@ -39,7 +39,7 @@ function doFilter(filter) {
 <template>
   <div 
       v-if="props.todos.length > 0"
-      class="sticky top-[100vh] p-4 bg-gray-300 shadow-md text-sm "
+      class="sticky top-[100vh] p-4 bg-gray-300 shadow-md text-sm text-gray-900  "
     >
       <div class="flex justify-between">
         <div class="">

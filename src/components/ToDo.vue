@@ -29,7 +29,7 @@ function deleteTodo(todo_id) {
 </script>
 
 <template>
-  <div class="absolute w-full h-[calc(100vh-2rem)] mt-4 overflow-hidden bg-gray-100 rounded shadow lg:w-3/4 lg:max-w-xl ">
+  <div class="absolute w-full h-[calc(100vh-2rem)] mt-4 overflow-hidden bg-gray-100 rounded shadow-xl lg:w-3/4 lg:max-w-xl">
     <ToDoHeader @add="addTodo($event)" />
 
     <div class="h-[calc(100vh-11rem)] overflow-x-hidden overflow-y-auto px-6 pb-2" ref="listRef">

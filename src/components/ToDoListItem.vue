@@ -39,8 +39,13 @@ function deleteTodo(todo_id) {
 </script>
 
 <template>
-  <li>
-    <div class="flex-1 p-4" v-if="!isShowingEditForm">
+  <li 
+    :class="todo.completed ? 'bg-gray-200' : 'bg-white'"
+  >
+    <div 
+      v-if="!isShowingEditForm"
+      class="flex-1 p-4" 
+    >
       <input 
         :id="'cb-' + todo.id"
         type="checkbox" 
@@ -57,7 +62,10 @@ function deleteTodo(todo_id) {
       </label>
     </div>
   
-    <div class="hidden group-hover:block" v-if="!isShowingEditForm">
+    <div 
+      v-if="!isShowingEditForm"
+      class="hidden group-hover:block" 
+    >
       <button 
         class="p-1 mr-2 font-bold text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:bg-indigo-700"
         @click="showEditForm()"
