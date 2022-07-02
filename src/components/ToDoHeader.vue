@@ -30,7 +30,7 @@ function addTodo() {
 </script>
 
 <template>
-  <div class="">
+  <div class="p-6 pb-0">
     <div class="flex justify-between pb-4 mb-4 border-b-2 border-gray-500">
       <div class="text-3xl font-bold">
         Todo

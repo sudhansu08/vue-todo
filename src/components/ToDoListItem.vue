@@ -31,8 +31,9 @@ function updateTodo() {
 }
 
 function deleteTodo(todo_id) {
-  confirm("Delete?");
-  emit('delete', todo_id);
+  if(confirm("Delete?")) {
+    emit('delete', todo_id);
+  }
 }
 
 </script>
