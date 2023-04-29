@@ -1,5 +1,3 @@
-import { ref, watch } from "vue";
-
 export function useStorage(name: string, data: any) {    
     let storedData = read();
 

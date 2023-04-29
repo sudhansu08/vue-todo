@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref, nextTick, computed } from "vue";
-import { useTodoForm } from "./stores/useTodoForm";
 
 const inputNewTodo = ref();
 const add_todo = ref('');
-const isShowingAddForm = computed(() => useTodoForm.value.show_add_todo);
+
+const show_add_todo = useState('show_add_todo', () => false)
+const editing_todo_id = useState('editing_todo_id', () => null)
+
+const isShowingAddForm = computed(() => show_add_todo.value);
 const showError = computed(() => !add_todo.value || (add_todo.value).trim() === '' );
 
 const emit = defineEmits(['add']);
 
 async function showAddForm() {
-  useTodoForm.value.show_add_todo = true;
-  useTodoForm.value.editing_todo_id = null;
+  show_add_todo.value = true;
+  editing_todo_id.value = null;
 
   await nextTick;
   inputNewTodo.value.focus();
@@ -24,7 +26,7 @@ function addTodo() {
 	}
   emit('add', (add_todo.value).trim());
 	add_todo.value = '';
-  useTodoForm.value.show_add_todo = false;
+  show_add_todo.value = false;
 }
 
 </script>
@@ -86,7 +88,7 @@ function addTodo() {
             </button>
             <button 
               type="button"
-              @click="useTodoForm.show_add_todo = false"
+              @click="show_add_todo = false"
               class="px-2 py-1 font-bold text-white bg-red-600 rounded-md hover:bg-red-500 focus:bg-red-700"
             >
               Cancel

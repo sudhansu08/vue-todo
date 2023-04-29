@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { ref, nextTick, computed } from "vue";
-import { useTodoForm } from "./stores/useTodoForm";
-
 const props = defineProps(['todo']);
 
 const emit = defineEmits(['delete']);
 
 const inputUpdateTodo = ref();
 const edit_todo = ref('');
-const isShowingEditForm = computed(() => props.todo.id === useTodoForm.value.editing_todo_id);
+const isShowingEditForm = computed(() => props.todo.id === editing_todo_id.value);
 const showError = computed(() => !edit_todo.value || (edit_todo.value).trim() === '' );
 
+const show_add_todo = useState('show_add_todo')
+const editing_todo_id = useState('editing_todo_id')
+
 async function showEditForm() {
-  useTodoForm.value.show_add_todo = false;
-  useTodoForm.value.editing_todo_id = props.todo.id;
+  show_add_todo.value = false;
+  editing_todo_id.value = props.todo.id;
   edit_todo.value = props.todo.todo;
 
   await nextTick;
@@ -27,7 +27,7 @@ function updateTodo() {
 	}
 
   props.todo.todo = (edit_todo.value).trim();
-  useTodoForm.value.editing_todo_id = null;
+  editing_todo_id.value = null;
 }
 
 function deleteTodo(todo_id: string) {
@@ -117,7 +117,7 @@ function deleteTodo(todo_id: string) {
             </button>
             <button 
               type="button"
-              @click="useTodoForm.editing_todo_id = null"
+              @click="editing_todo_id = null"
               class="px-2 py-1 font-bold text-white bg-red-600 rounded-md hover:bg-red-500 focus:bg-red-700"
             >
               Cancel

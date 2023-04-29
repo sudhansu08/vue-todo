@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { computed, nextTick } from "@vue/runtime-core";
-import ToDoListItem from './ToDoListItem.vue'
 
 const props = defineProps(['todos', 'selected_filter']);
 const emit = defineEmits(['delete']);

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ref } from "@vue/reactivity";
-import { computed } from "@vue/runtime-core";
-
 const props = defineProps(['todos', 'selected_filter']);
 const emit = defineEmits(['update:selected_filter', 'update:todos']);
 
