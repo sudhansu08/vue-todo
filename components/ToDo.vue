@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import ToDoHeader from './ToDoHeader.vue'
-import ToDoList from './ToDoList.vue'
-import ToDoFooter from './ToDoFooter.vue'
-
-import { useStorage } from "./stores/useStorage";
-import { ref } from '@vue/reactivity';
-import { nextTick } from '@vue/runtime-core';
 
 const todos = useStorage('todos', []);
 const selected_filter = useStorage('selected_filter', 'All');
+
 const listRef = ref();
 
 async function addTodo(add_todo:string) {

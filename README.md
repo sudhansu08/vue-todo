@@ -1,8 +1,36 @@
-## Instructions
+## Setup
 
-Please follow these steps to install the application and run it:
+Make sure to install the dependencies:
 
-```sh
-npm i
+```bash
+# yarn
+yarn install
+
+# npm
+npm install
+
+# pnpm
+pnpm install
+```
+
+## Development Server
+
+Start the development server on `http://localhost:3000`
+
+```bash
 npm run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+npm run build
+```
+
+Locally preview production build:
+
+```bash
+npm run preview
 ```
