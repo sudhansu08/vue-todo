@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { Database } from "~~/types/database.types";
+import { ToDo } from "~~/types/todo.d.types";
+const client = useSupabaseClient<Database>();
+
 const props = defineProps(['todo']);
 
 const emit = defineEmits(['delete']);
@@ -14,25 +18,37 @@ const editing_todo_id = useState('editing_todo_id')
 async function showEditForm() {
   show_add_todo.value = false;
   editing_todo_id.value = props.todo.id;
-  edit_todo.value = props.todo.todo;
+  edit_todo.value = props.todo.title;
 
   await nextTick;
   inputUpdateTodo.value.focus();
 }
 
-function updateTodo() {
+async function updateTodo () {
   if (showError.value) {
     inputUpdateTodo.value.focus();
 		return;
 	}
 
-  props.todo.todo = (edit_todo.value).trim();
+  const { data } = await client.from('todos')
+    .update({
+      title: edit_todo.value.trim()
+    })
+    .eq(`id`, editing_todo_id.value)
+    .select('id, title, completed')
+    .single()
+
+  props.todo.title = (edit_todo.value).trim();
   editing_todo_id.value = null;
 }
 
-function deleteTodo(todo_id: string) {
+const toggleTodo = async () => {
+  await client.from('todos').update({ completed: props.todo.completed }).match({ id: props.todo.id })
+}
+
+function deleteTodo() {
   if(confirm("Delete?")) {
-    emit('delete', todo_id);
+    emit('delete', props.todo.id);
   }
 }
 
@@ -51,6 +67,7 @@ function deleteTodo(todo_id: string) {
         type="checkbox" 
         class="float-left w-4 h-4 mt-1 mr-2 align-top cursor-pointer" 
         v-model="todo.completed"
+        @change="toggleTodo"
       >
   
       <label 
@@ -58,7 +75,7 @@ function deleteTodo(todo_id: string) {
         class="inline-block text-gray-900 break-words"
         :class="{'line-through': todo.completed}"
       >
-        {{ todo.todo }}
+        {{ todo.title }}
       </label>
     </div>
   
@@ -76,7 +93,7 @@ function deleteTodo(todo_id: string) {
       </button>
       <button 
         class="p-1 mr-2 font-bold text-white bg-red-600 rounded-md hover:bg-red-500 focus:bg-red-700"
-        @click="deleteTodo(todo.id)"
+        @click="deleteTodo()"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
