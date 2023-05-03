@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { Database } from "~~/types/database.types";
+const client = useSupabaseClient<Database>();
+
 const props = defineProps(['todos', 'selected_filter']);
 const emit = defineEmits(['update:selected_filter', 'update:todos']);
 
@@ -21,9 +24,10 @@ const completedTodo = computed(() => {
   return props.todos.filter((todo: any) => todo.completed)
 });
 
-function deleteCompleted() {
+const deleteCompleted = async () => {
   if(confirm("Delete?")) {
-    let newTodos = (props.todos).filter((todo: any) => todo.completed === false);
+    let newTodos = props.todos.filter((todo: any) => todo.completed === false);
+    await client.from('todos').delete().match({ completed: true })
     emit('update:todos', newTodos);
   }
 }
@@ -31,6 +35,12 @@ function deleteCompleted() {
 function doFilter(filter:string) {
   emit('update:selected_filter', filter);
 }
+
+const logout = async () => {
+  await client.auth.signOut()
+  navigateTo('/')
+}
+
 </script>
 
 <template>
@@ -65,6 +75,18 @@ function doFilter(filter:string) {
                 @click.prevent="deleteCompleted()"
               >
                 Clear {{ completedTodo.length }} completed items
+              </a>
+            </div>
+          </div>
+          <div class="flex justify-start">
+            <div class="pr-2">|</div>
+            <div>
+              <a
+                href="#"
+                class="no-underline text-grey-darkest hover:bg-pink-lighter"
+                @click.prevent="logout()"
+              >
+                Logout
               </a>
             </div>
           </div>
