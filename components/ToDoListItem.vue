@@ -1,89 +1,87 @@
 <script setup lang="ts">
-import { Database } from "~~/types/database.types";
-import { ToDo } from "~~/types/todo.d.types";
-const client = useSupabaseClient<Database>();
+import type { Database } from '~~/types/database.types'
 
-const props = defineProps(['todo']);
+const props = defineProps(['todo'])
 
-const emit = defineEmits(['delete']);
+const emit = defineEmits(['delete'])
 
-const inputUpdateTodo = ref();
-const edit_todo = ref('');
-const isShowingEditForm = computed(() => props.todo.id === editing_todo_id.value);
-const showError = computed(() => !edit_todo.value || (edit_todo.value).trim() === '' );
+const client = useSupabaseClient<Database>()
 
 const show_add_todo = useState('show_add_todo')
 const editing_todo_id = useState('editing_todo_id')
 
-async function showEditForm() {
-  show_add_todo.value = false;
-  editing_todo_id.value = props.todo.id;
-  edit_todo.value = props.todo.title;
+const inputUpdateTodo = ref()
+const edit_todo = ref('')
+const isShowingEditForm = computed(() => props.todo.id === editing_todo_id.value)
+const showError = computed(() => !edit_todo.value || (edit_todo.value).trim() === '')
 
-  await nextTick;
-  inputUpdateTodo.value.focus();
+async function showEditForm() {
+  show_add_todo.value = false
+  editing_todo_id.value = props.todo.id
+  edit_todo.value = props.todo.title
+
+  await nextTick
+  inputUpdateTodo.value.focus()
 }
 
-async function updateTodo () {
+async function updateTodo() {
   if (showError.value) {
-    inputUpdateTodo.value.focus();
-		return;
-	}
+    inputUpdateTodo.value.focus()
+    return
+  }
 
-  const { data } = await client.from('todos')
+  await client.from('todos')
     .update({
-      title: edit_todo.value.trim()
+      title: edit_todo.value.trim(),
     })
-    .eq(`id`, editing_todo_id.value)
+    .eq('id', editing_todo_id.value)
     .select('id, title, completed')
     .single()
 
-  props.todo.title = (edit_todo.value).trim();
-  editing_todo_id.value = null;
+  props.todo.title = (edit_todo.value).trim()
+  editing_todo_id.value = null
 }
 
-const toggleTodo = async () => {
+async function toggleTodo() {
   await client.from('todos').update({ completed: props.todo.completed }).match({ id: props.todo.id })
 }
 
 function deleteTodo() {
-  if(confirm("Delete?")) {
-    emit('delete', props.todo.id);
-  }
+  if (confirm('Delete?'))
+    emit('delete', props.todo.id)
 }
-
 </script>
 
 <template>
-  <li 
+  <li
     :class="todo.completed ? 'bg-gray-200' : 'bg-white'"
   >
-    <div 
+    <div
       v-if="!isShowingEditForm"
-      class="flex-1 p-4" 
+      class="flex-1 p-4"
     >
-      <input 
-        :id="'cb-' + todo.id"
-        type="checkbox" 
-        class="float-left w-4 h-4 mt-1 mr-2 align-top cursor-pointer" 
+      <input
+        :id="`cb-${todo.id}`"
         v-model="todo.completed"
+        type="checkbox"
+        class="float-left w-4 h-4 mt-1 mr-2 align-top cursor-pointer"
         @change="toggleTodo"
       >
-  
-      <label 
-        :for="'cb-' + todo.id"
+
+      <label
+        :for="`cb-${todo.id}`"
         class="inline-block text-gray-900 break-words"
-        :class="{'line-through': todo.completed}"
+        :class="{ 'line-through': todo.completed }"
       >
         {{ todo.title }}
       </label>
     </div>
-  
-    <div 
+
+    <div
       v-if="!isShowingEditForm"
-      class="hidden group-hover:block" 
+      class="hidden group-hover:block"
     >
-      <button 
+      <button
         class="p-1 mr-2 font-bold text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:bg-indigo-700"
         @click="showEditForm()"
       >
@@ -91,7 +89,7 @@ function deleteTodo() {
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
         </svg>
       </button>
-      <button 
+      <button
         class="p-1 mr-2 font-bold text-white bg-red-600 rounded-md hover:bg-red-500 focus:bg-red-700"
         @click="deleteTodo()"
       >
@@ -101,7 +99,7 @@ function deleteTodo() {
       </button>
     </div>
 
-    <div class="w-full" v-if="isShowingEditForm">
+    <div v-if="isShowingEditForm" class="w-full">
       <transition
         enter-active-class="duration-300 ease-out"
         enter-from-class="transform opacity-0"
@@ -110,32 +108,32 @@ function deleteTodo() {
         leave-from-class="opacity-100"
         leave-to-class="transform opacity-0"
       >
-        <form 
+        <form
           v-if="isShowingEditForm"
-          @submit.prevent="updateTodo()"
           class="p-4 bg-gray-200 border rounded-lg"
-          >
-          <input 
-            type="text" 
+          @submit.prevent="updateTodo()"
+        >
+          <input
             ref="inputUpdateTodo"
             v-model="edit_todo"
-            placeholder="Update todo" 
+            type="text"
+            placeholder="Update todo"
             class="block w-full p-3 text-sm border-gray-200 rounded-md shadow-sm focus:border-blue-400 focus:ring-blue-400 "
           >
-          <div v-if="showError" class="pt-1 text-sm text-red-500" >
+          <div v-if="showError" class="pt-1 text-sm text-red-500">
             This field is required.
           </div>
           <div class="mt-2 space-x-2">
-            <button 
+            <button
               type="submit"
               class="px-2 py-1 font-bold text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:bg-indigo-700"
             >
               Save
             </button>
-            <button 
+            <button
               type="button"
-              @click="editing_todo_id = null"
               class="px-2 py-1 font-bold text-white bg-red-600 rounded-md hover:bg-red-500 focus:bg-red-700"
+              @click="editing_todo_id = null"
             >
               Cancel
             </button>
@@ -143,6 +141,5 @@ function deleteTodo() {
         </form>
       </transition>
     </div>
-    
   </li>
 </template>
